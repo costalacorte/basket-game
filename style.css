@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #eef;
+  font-family: Arial, sans-serif;
+}
+
+#gameArea {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  margin: 30px auto;
+  background-color: #cfc;
+  border: 2px solid #333;
+  overflow: hidden;
+}
+
+#basket {
+  position: absolute;
+  bottom: 0;
+  left: 270px; /* Start centered */
+  width: 60px;
+  height: 40px;
+  background-color: brown;
+  border-radius: 10px; }
