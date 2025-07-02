@@ -8,8 +8,25 @@
 </head>
 <body>
   <div id="gameArea">
-    <div id="basket"></div>
+  <div id="startScreen">
+    <h1>Fruit Basket Game</h1>
+    <button id="startButton">PLAY NOW</button>
   </div>
+
+  <div id="gameOverScreen" style="display: none;">
+    <h2>Game Over!</h2>
+    <p id="finalScore"></p>
+    <button id="restartButton">Restart</button>
+  </div>
+
+  <div id="scoreBoard">
+    <span id="score">Score: 0</span>
+    <span id="timer">Time: 30s</span>
+  </div>
+
+  <div id="basket"></div>
+</div>
+
   <script src="script.js"></script>
 </body>
 </html>
