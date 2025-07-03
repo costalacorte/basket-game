@@ -6,7 +6,7 @@ const step = 20; //não esquecer
 
 
 let score = 0;
-let timeLeft = 30;
+let timeLeft = 45;
 let timerInterval;
 let bananaInterval;
 let appleInterval;
@@ -34,13 +34,12 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+//para o bug
+
 
 function startGame() {
-  
-  score = 0;
-  timeLeft = 45;
-  document.getElementById('score').textContent = 'Score: 0';
-  document.getElementById('timer').textContent = 'Time: 45s';
+  document.getElementById('score').textContent = `Score: ${score}`;
+  document.getElementById('timer').textContent = `Time: ${timeLeft}s`;
 
  
   startFruitIntervals();
@@ -105,9 +104,16 @@ function startFruitIntervals() {
 
 
 function stopFruitIntervals() {
+  // stop generating new fruits
   clearInterval(bananaInterval);
   clearInterval(appleInterval);
   clearInterval(watermelonInterval);
+
+  // delete existing fruits
+  const allRemainingFruits = document.querySelectorAll(".fruit")
+  allRemainingFruits.forEach((fruitElm) => {
+    fruitElm.remove()
+  })
 }
 
 
@@ -122,17 +128,6 @@ function endGame() {
   finalScore.textContent = `Your score: ${score}`;
 }
 
-
-window.addEventListener('blur', () => {
-  stopFruitIntervals();
-});
-
-
-window.addEventListener('focus', () => {
-  if (timeLeft > 0) {
-    startFruitIntervals();
-  }
-});
 
 const restartButton = document.getElementById('restartButton');
 restartButton.addEventListener('click', () => {
