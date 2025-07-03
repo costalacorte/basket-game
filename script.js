@@ -3,6 +3,8 @@ const gameArea = document.getElementById('gameArea');
 const startScreen = document.getElementById('startScreen');
 const startButton = document.getElementById('startButton');
 const step = 20; //não esquecer
+const fruitSound = new Audio('Default1.wav');
+const wormSound = new Audio('def2.wav');
 
 
 let score = 0;
@@ -11,6 +13,7 @@ let timerInterval;
 let bananaInterval;
 let appleInterval;
 let watermelonInterval;
+let wormInterval;
 
 
 startButton.addEventListener('click', () => {
@@ -38,6 +41,9 @@ document.addEventListener('keydown', (event) => {
 
 
 function startGame() {
+  score = 0;
+  timeLeft = 45;
+
   document.getElementById('score').textContent = `Score: ${score}`;
   document.getElementById('timer').textContent = `Time: ${timeLeft}s`;
 
@@ -60,7 +66,15 @@ function createFruit(imageSrc, speed, points) {
   fruit.src = imageSrc;
   fruit.classList.add('fruit');
 
-  fruit.style.left = Math.floor(Math.random() * (gameArea.clientWidth - 40)) + 'px';
+  if (imageSrc === 'pinneple.jpeg') {
+    fruit.style.width = '100px';
+    fruit.style.height = '100px';
+  }
+
+  const lanes = [0, 100, 200, 300, 400, 500];
+
+  const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
+  fruit.style.left = randomLane + 'px';
   fruit.style.top = '0px';
 
   gameArea.appendChild(fruit);
@@ -72,23 +86,34 @@ function createFruit(imageSrc, speed, points) {
     const basketRect = basket.getBoundingClientRect();
     const fruitRect = fruit.getBoundingClientRect();
 
-    
     if (
       fruitRect.bottom >= basketRect.top &&
       fruitRect.top <= basketRect.bottom &&
       fruitRect.left <= basketRect.right &&
       fruitRect.right >= basketRect.left
     ) {
-      clearInterval(fallInterval);
-      fruit.remove();
+      clearInterval(fallInterval); // Para o movimento
+      fruit.remove(); // Remove a fruta da tela
 
-      
+      // Toca o som certo: minhoca ou fruta boa
+      if (imageSrc === 'worm.jpg') {
+        wormSound.play();
+      } else {
+        fruitSound.play();
+      }
+
+      // Atualiza a pontuação
       score += points;
       document.getElementById('score').textContent = `Score: ${score}`;
+
+      // Se o score ficou 0 ou menor, acaba o jogo
+      if (score <= 0) {
+        endGame();
+      }
     }
 
-    
-    if (top + 40 >= gameArea.clientHeight) {
+    // Se a fruta chegou no fundo do gameArea, remove também
+    if (top + parseInt(fruit.style.height || '40') >= gameArea.clientHeight) {
       clearInterval(fallInterval);
       fruit.remove();
     }
@@ -100,6 +125,8 @@ function startFruitIntervals() {
   bananaInterval = setInterval(() => createFruit('banana.jpg', 5, 10), 3000);
   appleInterval = setInterval(() => createFruit('apple.jpg', 3, 20), 4000);
   watermelonInterval = setInterval(() => createFruit('watermelon.jpg', 2, 30), 5000);
+  pineappleInterval = setInterval(() => createFruit('pinneple.jpeg', 3, 50), 8000);
+  wormInterval = setInterval(() => createFruit('worm.jpg', 3, -30), 5000);
 }
 
 
@@ -108,6 +135,8 @@ function stopFruitIntervals() {
   clearInterval(bananaInterval);
   clearInterval(appleInterval);
   clearInterval(watermelonInterval);
+  clearInterval(pineappleInterval);
+  clearInterval(wormInterval);
 
   // delete existing fruits
   const allRemainingFruits = document.querySelectorAll(".fruit")
